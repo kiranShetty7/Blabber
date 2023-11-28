@@ -1,0 +1,50 @@
+.container {
+    display: grid;
+    grid-template-columns: 0.5fr 2.5fr 0.5fr 1fr;
+    padding: 10px;
+    border-bottom: 1px solid grey;
+}
+
+
+.item1 {
+    align-self: center;
+}
+
+.item2 {
+    padding: 10px;
+    justify-self: stretch;
+}
+
+.item3 {
+    align-self: center;
+    justify-self: center;
+}
+
+.item4 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.chatName {
+    font-size: 1.5rem;
+    margin: 0px;
+}
+
+.unread{
+    color:#7584f4
+}
+
+.latestMessage {
+    margin-top: 0.5rem;
+}
+
+.container:hover {
+    background-color: #e5eef9;
+}
+
+.selected{
+    background-color: #e5eef9 !important;
+}

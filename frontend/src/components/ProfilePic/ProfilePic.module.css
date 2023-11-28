@@ -1,0 +1,10 @@
+.profile{
+    height:3rem;
+    width:3rem;
+    border-radius: 50px;
+}
+
+.noImage{
+    height:3rem !important;
+    width:3rem !important;
+}

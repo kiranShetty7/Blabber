@@ -1,0 +1,45 @@
+.container {
+    border-right: 1px solid #e0e0e0;
+    height: 100vh;
+    overflow: scroll;
+}
+
+.header {
+    position: sticky;
+    top: 0;
+    display: grid;
+    grid-template-columns: 90% 10%;
+    background-color: #FFBC47;
+    color: #fff;
+    height: 3rem;
+    font-size: 1.5rem;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1; /* Ensure header stays above other elements */
+}
+
+.groupAddIcon {
+    align-self: start;
+    font-size: 2.5rem !important;
+    cursor: pointer;
+    transition: color 0.3s ease-in-out;
+}
+
+.search {
+    width: 90%;
+    border-radius: 5px;
+    justify-self: center;
+    align-self: center;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.search:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.chatList {
+    overflow-y: auto;
+}
+
+
