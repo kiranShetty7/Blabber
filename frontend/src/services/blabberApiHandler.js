@@ -7,7 +7,8 @@ import {
   LOGIN,
   GET_BLABBER_USERS,
   CREATE_BLABBER_CHAT,
-  GET_BLABBER_CHAT_LIST
+  GET_BLABBER_CHAT_LIST,
+  SEND_MESSAGE
 } from "./Constants";
 import axios from 'axios'
 
@@ -97,6 +98,23 @@ export async function getBlabberChats() {
 
       };
       const response = await axios.get(URL, CONFIG);
+      resolve(response);
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
+export async function sendMessage(payload) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const URL = BLABBER_BASE_URL + VERSION + CHAT + SEND_MESSAGE;
+      const CONFIG = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+      const response = await axios.post(URL, payload, CONFIG);
       resolve(response);
     } catch (error) {
       reject(error);

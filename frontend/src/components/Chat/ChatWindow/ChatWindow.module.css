@@ -1,3 +1,18 @@
+.container {
+    height: 100vh;
+    position: relative;
+    background-size: cover;
+    background-image: url('../../../assets/noChat.png');
+}
+
+.sendButton{
+    cursor: pointer;
+}
+
 .typingSection{
     width:100%;
+}
+
+.notAllowed{
+    cursor: not-allowed;
 }

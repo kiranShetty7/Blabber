@@ -102,6 +102,8 @@ const sendMessage = asyncHandler(async (req, res) => {
             }
             else {
                 res.status(201).json({
+                    success:"true",
+                    message:"Message sent succesfully",
                     messageId: messageCreated._id
                 })
             }

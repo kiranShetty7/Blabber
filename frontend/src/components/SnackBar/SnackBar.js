@@ -22,10 +22,6 @@ const SnackBar = () => {
         setOpen(snackBarState.open)
     }, [snackBarState.open])
 
-    const handleOpen = () => {
-        setOpen(true);
-    };
-
     const handleClose = (event) => {
         setOpen(false);
     };

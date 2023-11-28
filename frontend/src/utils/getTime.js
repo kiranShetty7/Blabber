@@ -15,6 +15,6 @@ export const getTime = (time) => {
   } else if (diffHours >= 24 && diffHours < 48) {
     return "Yesterday";
   } else {
-    return Time.format("HH-MMM-YYYY");
+    return Time.format("DD/MM/YYYY");
   }
 };

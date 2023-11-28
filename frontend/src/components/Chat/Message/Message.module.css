@@ -1,6 +1,7 @@
 .recievedMessagecontainer {
     display: flex;
     justify-content: left;
+    
 }
 
 .sentMessagecontainer {
@@ -13,16 +14,21 @@
     padding: 0.75rem;
     margin: 1rem;
     max-width: 30rem;
-    min-width: 3.5rem;
+    min-width: 5rem;
     position: relative;
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 2px );
+    -webkit-backdrop-filter: blur( 2px );
+    border-radius: 10px;
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
 }
 
 .receivedMessageColor {
-    background-color: #E6E1C5;
+    background: rgba( 230, 225, 197, 0.45 )
 }
 
 .sentMessageColor {
-    background-color: #8F95D3;
+    background: rgba( 143, 149, 211, 0.45 );
 }
 
 .message {

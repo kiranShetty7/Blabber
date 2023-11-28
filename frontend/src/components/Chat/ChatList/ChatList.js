@@ -11,13 +11,14 @@ import { updateInitialChatList } from '../../../store/ChatSlice';
 import { updateSelectedChatDetails } from '../../../store/ChatSlice';
 import { getUserName } from '../../../utils/GetChatName';
 import { getTime } from '../../../utils/getTime';
+import { updateAppLoader } from '../../../store/LoaderSlice';
 
 const ChatList = () => {
   const dispatch = useDispatch()
   const [chatList, setChatList] = React.useState([])
   const store = useSelector((state) => state)
   const chatState = store.chat
- 
+
 
   React.useEffect(() => {
     fetchData()
@@ -27,9 +28,14 @@ const ChatList = () => {
     setChatList(prev => [...chatState.chatList, ...prev])
   }, [chatState.chatList])
 
- 
+
 
   const fetchData = async () => {
+    dispatch(
+      updateAppLoader({
+        loading: true
+      })
+    )
     try {
       const response = await getBlabberChats()
       console.log(response?.data)
@@ -61,6 +67,11 @@ const ChatList = () => {
         })
       )
     }
+    dispatch(
+      updateAppLoader({
+        loading: false
+      })
+    )
   }
 
   const handleModalOpen = () => {
@@ -72,7 +83,7 @@ const ChatList = () => {
   }
 
   const handleClick = (chat) => {
-    console.log("clickable",chat)
+    console.log("clickable", chat)
     dispatch(
       updateSelectedChatDetails({
         selectedChatDetails: chat
