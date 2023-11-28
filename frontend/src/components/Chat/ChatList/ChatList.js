@@ -10,6 +10,7 @@ import { updateSnackBar } from '../../../store/SnackBarSlice';
 import { updateInitialChatList } from '../../../store/ChatSlice';
 import { updateSelectedChatDetails } from '../../../store/ChatSlice';
 import { getUserName } from '../../../utils/GetChatName';
+import { getTime } from '../../../utils/getTime';
 
 const ChatList = () => {
   const dispatch = useDispatch()

@@ -5,6 +5,7 @@ import Groups2Icon from '@mui/icons-material/Groups2';
 import ProfilePic from '../../ProfilePic/ProfilePic';
 import classes from './ChatItem.module.css'
 import { useSelector } from 'react-redux';
+import { getTime } from '../../../utils/getTime';
 
 const ChatItem = (props) => {
     const { latestMessage, created, profileLink, id, isGroupChat, chatName } = props
@@ -27,7 +28,7 @@ const ChatItem = (props) => {
             </div>
             <div className={classes.item3}>{isGroupChat && <Groups2Icon />} </div>
             <div className={classes.item4}>
-                <span>{moment(created).format('hh:mm A')}</span>
+                <span>{getTime(created)}</span>
                 {/* <MessageNumber>4</MessageNumber> */}
             </div>
         </div>

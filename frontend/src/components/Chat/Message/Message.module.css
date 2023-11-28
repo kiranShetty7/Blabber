@@ -1,0 +1,38 @@
+.recievedMessagecontainer {
+    display: flex;
+    justify-content: left;
+}
+
+.sentMessagecontainer {
+    display: flex;
+    justify-content: right;
+}
+
+.messageDiv {
+    border-radius: 15px;
+    padding: 0.75rem;
+    margin: 1rem;
+    max-width: 30rem;
+    min-width: 3.5rem;
+    position: relative;
+}
+
+.receivedMessageColor {
+    background-color: #E6E1C5;
+}
+
+.sentMessageColor {
+    background-color: #8F95D3;
+}
+
+.message {
+    font-size: 1rem;
+    justify-self: center;
+    padding: 2px;
+}
+
+.timeStamp {
+    display: flex;
+    justify-content: right;
+    font-size: 0.75rem;
+}
