@@ -40,6 +40,8 @@ const ChatWindow = () => {
         setIsGroupChat(chatState.selectedChatDetails?.isGroupChat)
         setSelectedChatId(chatState?.selectedChatDetails._id)
         fetchData(chatId)
+        console.log(location?.search)
+        console.log(chatId)
     }, [chatState.selectedChatDetails])
 
     const scrollToBottom = () => {
@@ -69,7 +71,7 @@ const ChatWindow = () => {
                         updateSnackBar({
                             open: true,
                             severity: 'error',
-                            message: 'Failed to send message'
+                            message: 'Failed to get chat'
                         })
                     )
                 }
@@ -149,7 +151,7 @@ const handleBack = ()=>{
     }
     return (
         <div className={`${classes.container } ${!chatId?classes.noDisplay:''}`}>
-            {selectedChatId ?
+            {chatId ?
                 <>
                     <div style={{ height: '2rem', backgroundColor: '#496DDB', padding: '1rem', display: 'flex', alignItems: 'center', gap: 5, position: 'sticky' }}>
                         <ArrowBackIosIcon className={!isMobile?classes.noBackButton:classes.backButton} onClick={handleBack} />

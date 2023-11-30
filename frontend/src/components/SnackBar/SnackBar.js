@@ -13,12 +13,13 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 
 const SnackBar = () => {
-    const [open, setOpen] = React.useState(true);
+    const [open, setOpen] = React.useState(false);
     const store = useSelector((state) => state)
     const snackBarState = store.snackBar
-
+    console.log(snackBarState.open)
 
     React.useEffect(() => {
+        console.log(open)
         setOpen(snackBarState.open)
     }, [snackBarState.open])
 

@@ -12,6 +12,7 @@ const snackBarSlice = createSlice({
     initialState,
     reducers: {
         updateSnackBar(state, action) {
+            console.log(state)
             state.open = action.payload.open;
             state.severity = action.payload.severity;
             state.message = action.payload.message;

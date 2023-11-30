@@ -33,13 +33,12 @@ const Login = () => {
         }
         try {
             const response = await loginOperation(payload)
-            console.log(response?.data)
             if (response?.data?.success) {
                 localStorage.setItem('name', response?.data?.data?.name)
                 localStorage.setItem('userId', response?.data?.data?.userId)
                 localStorage.setItem('profilePic', response?.data?.data?.profilePic)
                 localStorage.setItem('token', response?.data?.data?.token)
-                navigate('/chats')
+                setTimeout(() => { navigate('/chats') }, 1000)
             }
             else {
                 dispatch(

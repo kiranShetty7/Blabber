@@ -12,6 +12,36 @@ import {
   GET_INDIVIDUAL_CHAT_DETAILS
 } from "./Constants";
 import axios from 'axios'
+import history from "../RouterConfig/CustomBrowserHistory";
+
+const instance = axios.create({})
+
+instance.interceptors.request.use(
+  (config) => {
+
+    const userId = localStorage.getItem('userId')
+    const authToken = localStorage.getItem('token');
+    if (authToken) {
+      config.headers.Authorization = `Bearer ${authToken}`;
+      config.headers.userId = userId;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+instance.interceptors.response.use((response) => {
+
+  return Promise.resolve(response);
+}, (error) => {
+  if (error.response && error.response.status === 401) {
+    history.replace("/");
+  }
+
+});
+
 
 
 export async function loginOperation(payload) {
@@ -23,7 +53,7 @@ export async function loginOperation(payload) {
           'Content-Type': 'application/json',
         },
       };
-      const response = await axios.post(URL, payload, CONFIG);
+      const response = await instance.post(URL, payload, CONFIG);
       resolve(response);
     } catch (error) {
       reject(error);
@@ -40,7 +70,7 @@ export async function SignUpOperation(payload) {
           'Content-Type': 'application/json',
         },
       };
-      const response = await axios.post(URL, payload, CONFIG);
+      const response = await instance.post(URL, payload, CONFIG);
       resolve(response);
     } catch (error) {
       reject(error);
@@ -55,14 +85,13 @@ export async function getBlabberUsers(filter) {
       const CONFIG = {
         headers: {
           'Content-Type': 'application/json',
-          'userId': localStorage.getItem('userId')
         },
         params: {
           filter
         }
 
       };
-      const response = await axios.get(URL, CONFIG);
+      const response = await instance.get(URL, CONFIG);
       resolve(response);
     } catch (error) {
       reject(error);
@@ -79,7 +108,7 @@ export async function createBlabberChat(payload) {
           'Content-Type': 'application/json',
         },
       };
-      const response = await axios.post(URL, payload, CONFIG);
+      const response = await instance.post(URL, payload, CONFIG);
       resolve(response);
     } catch (error) {
       reject(error);
@@ -94,11 +123,10 @@ export async function getBlabberChats() {
       const CONFIG = {
         headers: {
           'Content-Type': 'application/json',
-          'userId': localStorage.getItem('userId')
         },
 
       };
-      const response = await axios.get(URL, CONFIG);
+      const response = await instance.get(URL, CONFIG);
       resolve(response);
     } catch (error) {
       reject(error);
@@ -115,7 +143,7 @@ export async function sendMessage(payload) {
           'Content-Type': 'application/json',
         },
       };
-      const response = await axios.post(URL, payload, CONFIG);
+      const response = await instance.post(URL, payload, CONFIG);
       resolve(response);
     } catch (error) {
       reject(error);
@@ -130,11 +158,10 @@ export async function getIndividualChat(chatId) {
       const CONFIG = {
         headers: {
           'Content-Type': 'application/json',
-          'userId': localStorage.getItem('userId')
         },
 
       };
-      const response = await axios.get(URL, CONFIG);
+      const response = await instance.get(URL, CONFIG);
       resolve(response);
     } catch (error) {
       reject(error);

@@ -87,7 +87,7 @@ const ChatList = () => {
   }
 
   const handleClick = (chat) => {
-    
+    console.log(chat)
     dispatch(
       updateSelectedChatDetails({
         selectedChatDetails: chat

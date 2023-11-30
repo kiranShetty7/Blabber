@@ -74,7 +74,7 @@ const SearchBar = (props) => {
                     updateChatList(
                         {
                             chatList: [{
-                                "_id": item._id,
+                                "_id": response?.data?.chatId,
                                 "isGroupChat": false,
                                 "users": users,
                                 "profilePic": localStorage.getItem('uploadProfileLink'),
@@ -118,7 +118,7 @@ const SearchBar = (props) => {
         }
         const users = [{ ...item }, { ...currentUser }]
 
-        console.log(users)
+
         const userList = users.map((item) => item._id)
 
         const payload = {
