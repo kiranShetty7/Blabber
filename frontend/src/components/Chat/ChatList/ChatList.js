@@ -13,6 +13,7 @@ import { getUserName } from '../../../utils/GetChatName';
 import { getTime } from '../../../utils/getTime';
 import { updateAppLoader } from '../../../store/LoaderSlice';
 import { useNavigate } from 'react-router';
+import { useLocation } from 'react-router';
 
 const ChatList = () => {
   const dispatch = useDispatch()
@@ -20,6 +21,9 @@ const ChatList = () => {
   const [chatList, setChatList] = React.useState([])
   const store = useSelector((state) => state)
   const chatState = store.chat
+  const location = useLocation()
+  const searchParams = new URLSearchParams(location?.search);
+  const chatId = searchParams.get('chatId');
 
 
   React.useEffect(() => {
@@ -93,7 +97,7 @@ const ChatList = () => {
   }
 
   return (
-    <div className={classes.container}>
+    <div className={`${classes.container}  ${chatId?classes.noDisplay:''}` }>
       <div className={classes.header}>
         <SearchBar className={classes.search} />
         <GroupAddIcon className={classes.groupAddIcon} onClick={handleModalOpen} />

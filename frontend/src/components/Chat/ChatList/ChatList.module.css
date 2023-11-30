@@ -44,4 +44,8 @@
     overflow-y: auto;
 }
 
-
+@media (max-width: 768px) {
+    .noDisplay {
+        display: none !important;
+    }
+}

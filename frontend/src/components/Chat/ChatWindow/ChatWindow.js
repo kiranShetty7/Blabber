@@ -13,10 +13,14 @@ import { useDispatch } from "react-redux";
 import { updateSnackBar } from '../../../store/SnackBarSlice';
 import { updateAppLoader } from '../../../store/LoaderSlice';
 import { useLocation } from 'react-router';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { useNavigate } from 'react-router';
+import { useMediaQuery } from '@mui/material';
 
 const ChatWindow = () => {
 
     const store = useSelector((state) => state)
+    const isMobile = useMediaQuery('(max-width:768px)');
     const chatState = store.chat
     const userId = localStorage.getItem('userId');
     const dispatch = useDispatch();
@@ -26,7 +30,7 @@ const ChatWindow = () => {
     const [enteredMessage, setEnteredMessage] = React.useState("")
     const [messageList, setMessageList] = React.useState([])
     const location = useLocation()
-    console.log(location)
+    const naviagte = useNavigate()
     const searchParams = new URLSearchParams(location?.search);
     const chatId = searchParams.get('chatId');
     const messagesEndRef = React.useRef(null)
@@ -40,25 +44,25 @@ const ChatWindow = () => {
 
     const scrollToBottom = () => {
         setTimeout(() => {
-          messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
         }, 100);
-      };
-      
+    };
+
 
     const fetchData = async (chatId) => {
         dispatch(
             updateAppLoader({
-              loading: true
+                loading: true
             })
-          )
-          if(chatId){
+        )
+        if (chatId) {
             try {
-           
+
                 const response = await getIndividualChat(chatId)
                 if (response?.data?.success) {
                     setMessageList(response?.data?.data);
-      
-    
+
+
                 }
                 else {
                     dispatch(
@@ -79,17 +83,33 @@ const ChatWindow = () => {
                     })
                 )
             }
-          }
+        }
 
         dispatch(
             updateAppLoader({
-              loading: false
+                loading: false
             })
-          )
-          scrollToBottom(); 
+        )
+        scrollToBottom();
     }
 
+const handleBack = ()=>{
+    dispatch(
+        updateAppLoader({
+            loading: true
+        })
+    )
 
+    setTimeout(() => {
+        naviagte('/chats')
+        dispatch(
+            updateAppLoader({
+                loading: false
+            })
+        )
+    }, 1000);
+  
+}
 
     const handleSendMessage = async () => {
 
@@ -128,10 +148,11 @@ const ChatWindow = () => {
 
     }
     return (
-        <div className={ `${classes.container}  `}>
+        <div className={`${classes.container } ${!chatId?classes.noDisplay:''}`}>
             {selectedChatId ?
                 <>
                     <div style={{ height: '2rem', backgroundColor: '#496DDB', padding: '1rem', display: 'flex', alignItems: 'center', gap: 5, position: 'sticky' }}>
+                        <ArrowBackIosIcon className={!isMobile?classes.noBackButton:classes.backButton} onClick={handleBack} />
                         <ProfilePic src={chatState.profilePic} />
                         <h3 style={{ color: '#fff' }}>{!isGroupChat ? getUserName(chatList) : chatState.selectedChatDetails.chatName}</h3>
 
@@ -143,12 +164,12 @@ const ChatWindow = () => {
                                     content={messages.message}
                                     timeStamp={messages.timeStamp}
                                     sentBy={messages.sentBy}
-                                    nextItem = {messageList[index+1]?.sentBy}
+                                    nextItem={messageList[index + 1]?.sentBy}
                                     isGroupChat={isGroupChat}
                                 />
                             </div>
                         ))}
-                      <div ref={messagesEndRef} />
+                        <div ref={messagesEndRef} />
                     </div>
                     <div style={{ position: 'sticky', bottom: 0, right: 0, left: 0, height: '4rem' }} >
                         <TextField

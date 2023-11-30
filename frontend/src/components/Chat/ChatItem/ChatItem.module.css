@@ -5,6 +5,11 @@
     border-bottom: 1px solid grey;
 }
 
+@media (max-width: 768px) {
+    .noDisplay {
+        display: none !important;
+    }
+}
 
 .item1 {
     align-self: center;

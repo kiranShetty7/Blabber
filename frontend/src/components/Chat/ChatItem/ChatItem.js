@@ -13,11 +13,15 @@ const ChatItem = (props) => {
     const chatState = store.chat
     const [selectedId, setSelectedId] = React.useState('')
 
+
     React.useEffect(() => {
         setSelectedId(chatState.selectedChatDetails._id);
     }, [chatState.selectedChatDetails._id]);
 
-    return (
+
+
+    return (<>
+
         <div key={id} className={`${classes.container} ${selectedId === id ? classes.selected : ''} `} onClick={props.onClick}>
             <div className={classes.item1} >
                 <ProfilePic src={profileLink} />
@@ -32,6 +36,7 @@ const ChatItem = (props) => {
                 {/* <MessageNumber>4</MessageNumber> */}
             </div>
         </div>
+        </>
 
     )
 }

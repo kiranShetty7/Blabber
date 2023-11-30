@@ -5,24 +5,36 @@
     background-image: url('../../../assets/noChat.png');
     height: calc(100vh - 4rem);
     margin-top: 4rem;
-    
 }
 
 
-.sendButton{
+@media (max-width: 768px) {
+    .noDisplay {
+        display: none !important;
+    }
+}
+
+.noBackButton {
+    display: none !important;
+}
+
+.backButton {
+    color: #fff;
     cursor: pointer;
 }
 
-.typingSection{
-    width:100%;
+
+.sendButton {
+    cursor: pointer;
+}
+
+.typingSection {
+    width: 100%;
     background-color: #fff;
 }
 
-.notAllowed{
+.notAllowed {
     cursor: not-allowed;
 }
 
-.profilePic{
-
-}
-
+.profilePic {}

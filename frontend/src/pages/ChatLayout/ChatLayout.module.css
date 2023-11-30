@@ -9,3 +9,9 @@
         grid-template-columns: 3fr 7fr;
     }
 }
+
+@media (max-width: 768px) {
+    .noDisplay {
+        display: none !important;
+    }
+}
