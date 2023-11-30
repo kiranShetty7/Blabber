@@ -1,12 +1,12 @@
 import classes from './ChatLayout.module.css'
 import ChatList from '../../components/Chat/ChatList/ChatList'
 import ChatWindow from '../../components/Chat/ChatWindow/ChatWindow'
-import CreateGroup from '../../components/CreateGroupModal/CreateGroup'
+import GlobalNavbar from '../../components/GlobalNavbar/GlobalNavbar'
 
 const ChatLayout = () => {
     return (
         <>
-            <CreateGroup />
+        <GlobalNavbar/>
             <div className={classes.gridContainer}>
                 <div >
                     <ChatList />

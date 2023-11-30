@@ -8,7 +8,8 @@ import {
   GET_BLABBER_USERS,
   CREATE_BLABBER_CHAT,
   GET_BLABBER_CHAT_LIST,
-  SEND_MESSAGE
+  SEND_MESSAGE,
+  GET_INDIVIDUAL_CHAT_DETAILS
 } from "./Constants";
 import axios from 'axios'
 
@@ -115,6 +116,25 @@ export async function sendMessage(payload) {
         },
       };
       const response = await axios.post(URL, payload, CONFIG);
+      resolve(response);
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
+export async function getIndividualChat(chatId) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const URL = BLABBER_BASE_URL + VERSION + CHAT + GET_INDIVIDUAL_CHAT_DETAILS + '/' + chatId;
+      const CONFIG = {
+        headers: {
+          'Content-Type': 'application/json',
+          'userId': localStorage.getItem('userId')
+        },
+
+      };
+      const response = await axios.get(URL, CONFIG);
       resolve(response);
     } catch (error) {
       reject(error);

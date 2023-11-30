@@ -1,3 +1,4 @@
+
 .recievedMessagecontainer {
     display: flex;
     justify-content: left;
@@ -41,4 +42,9 @@
     display: flex;
     justify-content: right;
     font-size: 0.75rem;
+}
+
+.sender{
+    font-weight: 500;
+    color:#7584f4;
 }

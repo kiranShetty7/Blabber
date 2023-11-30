@@ -1,0 +1,49 @@
+.container{
+    position: fixed; 
+    height:4rem;
+    top:10;
+    right:0;
+    left:0;
+    z-index: 2000;
+    background-color: #303633;
+}
+
+.innerContainer{
+    display: flex;
+    box-sizing: border-box;
+    justify-content: space-between;
+    width:100%;
+    padding: 10px;
+    padding-right:20px ;
+}
+
+.logo{
+    height: 2rem;
+    width: 2rem;
+}
+
+.logoContainer{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.text{
+    font-size: 2rem;
+    color: #fff;
+}
+
+.logoutContainer{
+    display: flex;
+    align-items: center;
+    gap:1rem;
+}
+
+.logout{
+    color: #fff;
+    cursor: pointer ;
+}
+
+.name{
+    color: #fff;
+}

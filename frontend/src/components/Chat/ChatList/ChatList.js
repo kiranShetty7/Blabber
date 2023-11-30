@@ -12,9 +12,11 @@ import { updateSelectedChatDetails } from '../../../store/ChatSlice';
 import { getUserName } from '../../../utils/GetChatName';
 import { getTime } from '../../../utils/getTime';
 import { updateAppLoader } from '../../../store/LoaderSlice';
+import { useNavigate } from 'react-router';
 
 const ChatList = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [chatList, setChatList] = React.useState([])
   const store = useSelector((state) => state)
   const chatState = store.chat
@@ -38,9 +40,7 @@ const ChatList = () => {
     )
     try {
       const response = await getBlabberChats()
-      console.log(response?.data)
       if (response?.data?.success) {
-        console.log(response.data.data)
         setChatList(response?.data?.data)
         dispatch(
           updateInitialChatList({
@@ -83,12 +83,13 @@ const ChatList = () => {
   }
 
   const handleClick = (chat) => {
-    console.log("clickable", chat)
+    
     dispatch(
       updateSelectedChatDetails({
         selectedChatDetails: chat
       })
     )
+    navigate(`/chats?chatId=${chat._id}`)
   }
 
   return (

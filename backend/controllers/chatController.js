@@ -1,9 +1,9 @@
 const Message = require('../models/messageModel')
 const Chat = require('../models/chatModel')
 const asyncHandler = require("express-async-handler");
-const {Types: {ObjectId}} = require('mongoose');
+const { Types: { ObjectId } } = require('mongoose');
 
-const createChat = asyncHandler(async (req, res) => { 
+const createChat = asyncHandler(async (req, res) => {
 
     const { isGroupChat, users, groupAdmin, chatName, profilePic } = req.body
 
@@ -13,7 +13,7 @@ const createChat = asyncHandler(async (req, res) => {
     }
     const chatExists = await Chat.find({ users: users })
 
-    if (!isGroupChat && chatExists.length>0) {
+    if (!isGroupChat && chatExists.length > 0) {
         res.status(400);
         throw new Error("Chat already exists");
     }
@@ -59,13 +59,16 @@ const getIndividualChat = asyncHandler(async (req, res) => {
     }
     else {
         const messagesRetrieved = await Message.find({ chatId: chatId })
-            .sort({ timeStamp: -1 })
+            .sort({ timeStamp: 1 })
             .select('-chatId')
+            .populate('sentBy')
 
 
         if (messagesRetrieved) {
             res.status(200).json({
-                messages: messagesRetrieved
+                success: "true",
+                message: "Chat details retrieved succesfully",
+                data: messagesRetrieved
             })
         }
     }
@@ -102,8 +105,8 @@ const sendMessage = asyncHandler(async (req, res) => {
             }
             else {
                 res.status(201).json({
-                    success:"true",
-                    message:"Message sent succesfully",
+                    success: "true",
+                    message: "Message sent succesfully",
                     messageId: messageCreated._id
                 })
             }

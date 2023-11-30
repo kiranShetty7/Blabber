@@ -8,3 +8,4 @@ export const GET_BLABBER_USERS = 'getBlabberUsers'
 export const CREATE_BLABBER_CHAT = 'createBlabberChat'
 export const GET_BLABBER_CHAT_LIST = 'listOfChats'
 export const SEND_MESSAGE = "sendMessage"
+export const GET_INDIVIDUAL_CHAT_DETAILS = "getIndividualChat"

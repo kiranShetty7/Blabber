@@ -9,7 +9,7 @@ const RouterConfig = () => {
         <>
             <Routes>
                 <Route path="/" element={<AuthLayout />} />
-                <Route path="chats" element={<ChatLayout/>} />
+                <Route path="/chats" element={<ChatLayout/>} />
             </Routes>
         </>
     )

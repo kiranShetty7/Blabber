@@ -3,7 +3,11 @@
     position: relative;
     background-size: cover;
     background-image: url('../../../assets/noChat.png');
+    height: calc(100vh - 4rem);
+    margin-top: 4rem;
+    
 }
+
 
 .sendButton{
     cursor: pointer;
@@ -11,8 +15,14 @@
 
 .typingSection{
     width:100%;
+    background-color: #fff;
 }
 
 .notAllowed{
     cursor: not-allowed;
 }
+
+.profilePic{
+
+}
+

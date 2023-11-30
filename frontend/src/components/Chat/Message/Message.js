@@ -7,8 +7,9 @@ const Message = (props) => {
 
     return (
 
-        <div className={`${isFromCurrentUser(sentBy)?classes.sentMessagecontainer:classes.recievedMessagecontainer} `}>
-            <div className={`${classes.messageDiv} ${isFromCurrentUser(sentBy)?classes.sentMessageColor:classes.receivedMessageColor}`}>
+        <div className={`${isFromCurrentUser(sentBy._id)?classes.sentMessagecontainer:classes.recievedMessagecontainer} `}>
+            <div className={`${classes.messageDiv} ${isFromCurrentUser(sentBy?._id)?classes.sentMessageColor:classes.receivedMessageColor}`}>
+               {!isFromCurrentUser(sentBy?._id)&& <div className={classes.sender}>{sentBy.name}</div>}
                 <div className={classes.message}>{content}</div>
                 <div className={classes.timeStamp}>{getTime(timeStamp)}</div>
             </div>
