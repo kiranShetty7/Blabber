@@ -14,6 +14,7 @@ import { getTime } from '../../../utils/getTime';
 import { updateAppLoader } from '../../../store/LoaderSlice';
 import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router';
+import CreateGroup from '../../CreateGroupModal/CreateGroup';
 
 const ChatList = () => {
   const dispatch = useDispatch()
@@ -98,6 +99,7 @@ const ChatList = () => {
 
   return (
     <div className={`${classes.container}  ${chatId?classes.noDisplay:''}` }>
+      <CreateGroup/>
       <div className={classes.header}>
         <SearchBar className={classes.search} />
         <GroupAddIcon className={classes.groupAddIcon} onClick={handleModalOpen} />
