@@ -17,14 +17,15 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useNavigate } from 'react-router';
 import { useMediaQuery } from '@mui/material';
 
-const ChatWindow = () => {
 
+const ChatWindow = () => {
     const store = useSelector((state) => state)
     const isMobile = useMediaQuery('(max-width:768px)');
     const chatState = store.chat
+    const socketState = store.socket
     const userId = localStorage.getItem('userId');
     const dispatch = useDispatch();
-    const [selectedChatId, setSelectedChatId] = React.useState('')
+    const [selectedChat, setSelectedChat] = React.useState('')
     const [chatList, setChatList] = React.useState([])
     const [isGroupChat, setIsGroupChat] = React.useState(false)
     const [enteredMessage, setEnteredMessage] = React.useState("")
@@ -34,15 +35,52 @@ const ChatWindow = () => {
     const searchParams = new URLSearchParams(location?.search);
     const chatId = searchParams.get('chatId');
     const messagesEndRef = React.useRef(null)
+    const [socket, setSocket] = React.useState(null)
+ 
 
     React.useEffect(() => {
         setChatList(chatState.selectedChatDetails?.users)
         setIsGroupChat(chatState.selectedChatDetails?.isGroupChat)
-        setSelectedChatId(chatState?.selectedChatDetails._id)
+        setSelectedChat(chatState?.selectedChatDetails)
         fetchData(chatId)
         console.log(location?.search)
         console.log(chatId)
     }, [chatState.selectedChatDetails])
+
+
+    React.useEffect(()=>{
+        setSocket(socketState?.socket)
+    },[socketState?.socket])
+
+    // React.useEffect(()=>{
+    //     socket?.on(,(chat)=>{
+    //         console.log(chat)
+    //         console.log(chat?.message)
+        
+    //         console.log(selectedChat)
+    //         if(chat?.chatid === selectedChat?._id){
+    //             setMessageList(prev => [...prev, chat]);
+    //             scrollToBottom()
+    //         }
+    //     })
+    // },[socket])
+
+    React.useEffect(() => {
+        socket?.on("message received", (chat) => {
+            console.log(chat)
+            console.log(chat?.message)
+        
+            console.log(selectedChat)
+            if(chat?.chatId === selectedChat?._id){
+                setMessageList(prev => [...prev, chat]);
+                scrollToBottom()
+            }
+        });
+      
+        return () => {
+          socket?.off("message received");
+        };
+      }, [socket]);
 
     const scrollToBottom = () => {
         setTimeout(() => {
@@ -63,8 +101,7 @@ const ChatWindow = () => {
                 const response = await getIndividualChat(chatId)
                 if (response?.data?.success) {
                     setMessageList(response?.data?.data);
-
-
+            
                 }
                 else {
                     dispatch(
@@ -75,8 +112,10 @@ const ChatWindow = () => {
                         })
                     )
                 }
+                
             }
             catch (error) {
+                console.log(error)
                 dispatch(
                     updateSnackBar({
                         open: true,
@@ -95,30 +134,32 @@ const ChatWindow = () => {
         scrollToBottom();
     }
 
-const handleBack = ()=>{
-    dispatch(
-        updateAppLoader({
-            loading: true
-        })
-    )
-
-    setTimeout(() => {
-        naviagte('/chats')
+    const handleBack = () => {
         dispatch(
             updateAppLoader({
-                loading: false
+                loading: true
             })
         )
-    }, 1000);
-  
-}
+
+        setTimeout(() => {
+            naviagte('/chats')
+            dispatch(
+                updateAppLoader({
+                    loading: false
+                })
+            )
+        }, 1000);
+
+    }
 
     const handleSendMessage = async () => {
 
         const payload = {
             sentBy: userId,
             message: enteredMessage,
-            chatId: selectedChatId,
+            chatId: selectedChat?._id,
+            users:selectedChat?.users,
+            isGroupChat:selectedChat?.isGroupChat
         }
 
         try {
@@ -127,6 +168,7 @@ const handleBack = ()=>{
                 setMessageList(prev => [...prev, payload]);
                 setEnteredMessage('')
                 scrollToBottom()
+                socket.emit('newMessage',payload)
             }
             else {
                 dispatch(
@@ -150,11 +192,11 @@ const handleBack = ()=>{
 
     }
     return (
-        <div className={`${classes.container } ${!chatId?classes.noDisplay:''}`}>
+        <div className={`${classes.container} ${!chatId ? classes.noDisplay : ''}`}>
             {chatId ?
                 <>
                     <div style={{ height: '2rem', backgroundColor: '#496DDB', padding: '1rem', display: 'flex', alignItems: 'center', gap: 5, position: 'sticky' }}>
-                        <ArrowBackIosIcon className={!isMobile?classes.noBackButton:classes.backButton} onClick={handleBack} />
+                        <ArrowBackIosIcon className={!isMobile ? classes.noBackButton : classes.backButton} onClick={handleBack} />
                         <ProfilePic src={chatState.profilePic} />
                         <h3 style={{ color: '#fff' }}>{!isGroupChat ? getUserName(chatList) : chatState.selectedChatDetails.chatName}</h3>
 

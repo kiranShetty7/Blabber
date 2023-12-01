@@ -5,6 +5,7 @@ const connectToDb = require('./config/dbConnection')
 const userRouter = require('./routers/userRouter')
 const chatRouter = require('./routers/chatRouter')
 const errorMiddleware = require('./middlewares/errorMiddleware')
+const { Server } = require("socket.io");
 
 const app = express()
 connectToDb()
@@ -30,6 +31,42 @@ app.use('/v1/chat', chatRouter);
 app.use(errorMiddleware.notFound);
 app.use(errorMiddleware.errorHandler)
 
-app.listen(PORT, () => {
+const appServer = app.listen(PORT, () => {
   console.log(`Blabber chat app server is operational on port ${PORT}.`)
 })
+
+const io = new Server(appServer, {
+  pingTimeout: 30000,
+  cors: {
+    origin: 'http://localhost:3000'
+  }
+});
+
+io.on("connection", (socket) => {
+  console.log('Socket Connection established', socket.id)
+
+  socket.on('appEntered', (userId) => {
+    console.log(`${userId} has enterred blabber`)
+    socket.join(userId)
+    socket.emit('connected')
+  })
+
+  socket.on('chatEntered', (chatId) => {
+    socket.join(chatId)
+    console.log("User has joined the chat",chatId)
+  })
+
+  socket.on('newMessage', (chat) => {
+    console.log(chat,"socket macja")
+    if(!chat?.users)
+    console.log('Users not present')
+
+    chat?.users?.forEach(user => {
+      if(user?._id === chat.sentBy) return
+
+      socket.in(user._id).emit("message received",chat)
+      
+    });
+
+  })
+});

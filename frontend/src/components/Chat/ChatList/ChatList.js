@@ -15,6 +15,8 @@ import { updateAppLoader } from '../../../store/LoaderSlice';
 import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router';
 import CreateGroup from '../../CreateGroupModal/CreateGroup';
+import { updateSocket } from '../../../store/SocketSlice';
+import {io} from 'socket.io-client'
 
 const ChatList = () => {
   const dispatch = useDispatch()
@@ -25,7 +27,27 @@ const ChatList = () => {
   const location = useLocation()
   const searchParams = new URLSearchParams(location?.search);
   const chatId = searchParams.get('chatId');
+  const endpoint = "http://localhost:4000"
+  const [connectedToSocket, setConnectedToSocket] = React.useState(false)
+  const [socket, setSocket] = React.useState(null)
+  const userId = localStorage.getItem('userId');
 
+  React.useEffect(() => {
+    const newSocket = io(endpoint);
+    console.log(newSocket)
+    setSocket(newSocket);
+    dispatch(updateSocket({
+      socket: newSocket
+    }))
+
+    newSocket.emit("appEntered", userId);
+    newSocket.on("connection", () => setConnectedToSocket(true));
+
+    return () => {
+      newSocket.disconnect();
+    };
+
+  }, [])
 
   React.useEffect(() => {
     fetchData()
@@ -35,7 +57,12 @@ const ChatList = () => {
     setChatList(prev => [...chatState.chatList, ...prev])
   }, [chatState.chatList])
 
-
+//   React.useEffect(()=>{
+//     socket?.on("message received",(chat)=>{
+//         console.log(chat)
+      
+//     })
+// })
 
   const fetchData = async () => {
     dispatch(
@@ -94,12 +121,14 @@ const ChatList = () => {
         selectedChatDetails: chat
       })
     )
+
+    socket.emit('chatEntered', chat._id)
     navigate(`/chats?chatId=${chat._id}`)
   }
 
   return (
-    <div className={`${classes.container}  ${chatId?classes.noDisplay:''}` }>
-      <CreateGroup/>
+    <div className={`${classes.container}  ${chatId ? classes.noDisplay : ''}`}>
+      <CreateGroup />
       <div className={classes.header}>
         <SearchBar className={classes.search} />
         <GroupAddIcon className={classes.groupAddIcon} onClick={handleModalOpen} />
