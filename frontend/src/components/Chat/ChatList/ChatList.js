@@ -67,7 +67,6 @@ const ChatList = () => {
     try {
       const response = await getBlabberChats()
       if (response?.data?.success) {
-        console.log(response?.data?.data)
         setChatList(response?.data?.data)
         dispatch(
           updateInitialChatList({
@@ -76,13 +75,13 @@ const ChatList = () => {
         )
       }
       else {
-        dispatch(
-          updateSnackBar({
-            open: true,
-            severity: 'error',
-            message: 'Failed to fetch chats'
-          })
-        )
+        // dispatch(
+        //   updateSnackBar({
+        //     open: true,
+        //     severity: 'error',
+        //     message: 'Failed to fetch chats'
+        //   })
+        // )
       }
     }
     catch (error) {

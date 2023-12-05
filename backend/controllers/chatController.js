@@ -35,8 +35,6 @@ const createChat = asyncHandler(async (req, res) => {
 
 
     const chatCreated = await Chat.create(newChat)
-
-    console.log(chatCreated)
     if (chatCreated)
         res.status(201).json({
             success: true,

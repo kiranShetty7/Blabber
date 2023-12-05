@@ -14,6 +14,8 @@ import {
 } from "./Constants";
 import axios from 'axios'
 import history from "../RouterConfig/CustomBrowserHistory";
+import store from '../store/index'
+import { updateSnackBar } from "../store/SnackBarSlice";
 
 const instance = axios.create({})
 
@@ -39,6 +41,11 @@ instance.interceptors.response.use((response) => {
 }, (error) => {
   if (error.response && error.response.status === 401) {
     history.replace("/");
+    store.dispatch(updateSnackBar({
+      open: true,
+      severity: 'error',
+      message: 'Unauthorized ! Please login to continue'
+    }))
   }
 
 });
