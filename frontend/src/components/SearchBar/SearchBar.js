@@ -70,7 +70,6 @@ const SearchBar = (props) => {
     const createChat = async (item, payload, users) => {
         try {
             const response = await createBlabberChat(payload)
-            console.log(response?.data)
             if (response?.data?.success) {
 
                 dispatch(
@@ -146,8 +145,6 @@ const SearchBar = (props) => {
             return false;
         });
 
-
-        console.log(userExists)
         if (userExists?.length > 0) {
             const chatString = JSON.stringify(userExists[0]);
             localStorage.setItem('chatDetails', chatString);

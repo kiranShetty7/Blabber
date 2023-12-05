@@ -57,24 +57,6 @@ io.on("connection", (socket) => {
     console.log("User has joined the chat",chatId)
   })
 
-  socket.on("startTyping",(chatId)=>{
-
-    socket.to(chatId).emit("typing")
-    console.log( "started", chatId)
-   
-  })
-
-  socket.on("stopTyping",(chatId)=>{
-    socket.in(chatId).emit("stop Typing")
-    console.log("Stope",chatId)
-  })
-
-  socket.on('appEntered', (userId) => {
-    console.log(`${userId} has enterred blabber`)
-    socket.join(userId)
-    socket.emit('connected')
-  })
-
   socket.on('newMessage', (chat) => {
     console.log('chat',"socket macja")
     if(!chat?.users)
@@ -88,4 +70,6 @@ io.on("connection", (socket) => {
     });
 
   }) 
+
+  
 });

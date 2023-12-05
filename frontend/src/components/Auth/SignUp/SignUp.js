@@ -72,7 +72,6 @@ const SignUp = () => {
             clearErrors('confirmPassword');
         }
 
-        console.log(data);
         const payload = {
             name: data.name,
             email: data.email,
@@ -82,7 +81,6 @@ const SignUp = () => {
 
         try {
             const response = await SignUpOperation(payload)
-            console.log(response?.data)
             if (response?.data?.success) {
                 localStorage.setItem('name', response?.data?.data?.name)
                 localStorage.setItem('userId', response?.data?.data?.userId)

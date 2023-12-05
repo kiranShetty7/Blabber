@@ -18,7 +18,6 @@ const SnackBar = () => {
     const store = useSelector((state) => state)
     const dispatch = useDispatch()
     const snackBarState = store.snackBar
-    console.log(snackBarState.open)
 
     React.useEffect(() => {
 

@@ -70,7 +70,6 @@ const CreateGroup = (props) => {
 
         try {
             const response = await createBlabberChat(payload)
-            console.log(response?.data)
             if (response?.data?.success) {
 
                 dispatch(
@@ -145,7 +144,6 @@ const CreateGroup = (props) => {
     }
 
     React.useEffect(() => {
-        console.log(addGroupState)
         setOpen(addGroupState.open)
     }, [addGroupState.open])
 

@@ -38,7 +38,6 @@ const SearchBarWithChips = (props) => {
             if (response.data.success) {
                 setDisplayMenu(true);
                 const data = response?.data?.data?.filter((item) => !groupMembers.includes(item?.name))
-                console.log(data)
                 setMenuItems(data);
             } else {
                 dispatch(

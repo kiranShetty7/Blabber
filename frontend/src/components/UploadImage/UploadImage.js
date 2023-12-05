@@ -45,7 +45,6 @@ const UploadImage = ()=>{
                 setUploadSuccess(true);
             })
             .catch((err) => {
-                console.log(err);
                 setPicLoading(false);
             });
 

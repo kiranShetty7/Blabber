@@ -64,7 +64,6 @@ const ImageUpload = (props) => {
                 setUploadSuccess(true);
             })
             .catch((err) => {
-                console.log(err);
                 dispatch(updateLoader({loading:false}))
                 setPicLoading(false);
             });

@@ -11,7 +11,6 @@ const addGroupSlice = createSlice({
     initialState,
     reducers: {
         updateGroupModal(state, action) {
-            console.log(action)
             state.open = action.payload.open;
         },
         updateGroupMembers(state, action) {

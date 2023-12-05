@@ -34,7 +34,6 @@ const ChatList = () => {
 
   React.useEffect(() => {
     const newSocket = io(endpoint);
-    console.log(newSocket)
     setSocket(newSocket);
     dispatch(updateSocket({
       socket: newSocket
@@ -42,14 +41,6 @@ const ChatList = () => {
 
     newSocket.emit("appEntered", userId);
     newSocket.on("connected", () => setConnectedToSocket(true));
-
-  //   newSocket.on("message received", (chat) => {
-  //     console.log(chat);
-  //     console.log(chatId);
-  //     if (chat?.chatId !== chatId) {
-  //         // alert("sdcs cks")
-  //     }
-  // });
 
     return () => {
       newSocket.disconnect();
@@ -64,19 +55,7 @@ const ChatList = () => {
 
   React.useEffect(() => {
     setChatList(prev => [...chatState.chatList, ...prev])
-    console.log('aaf')
   }, [chatState.chatList])
-
-//   React.useEffect(() => {
-//     if (chatId) {
-      
-
-//         return () => {
-//             socket?.off("message received");
-//         };
-//     }
-
-// }, [socket]);
 
   const fetchData = async () => {
     dispatch(

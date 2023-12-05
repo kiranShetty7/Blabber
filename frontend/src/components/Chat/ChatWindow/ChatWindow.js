@@ -32,18 +32,10 @@ const ChatWindow = () => {
     const chatId = searchParams.get('chatId');
     const messagesEndRef = React.useRef(null)
     const [socket, setSocket] = React.useState(null)
-
-
     const [storedChat, setStoredChat] = React.useState({})
-    const [typing, setTyping] = React.useState(false)
-    const [isTyping, setIsTyping] = React.useState(false)
 
     React.useEffect(() => {
-
         fetchData(chatId)
-
-        console.log(location?.search)
-        console.log(chatId)
     }, [location?.search])
 
 
@@ -60,16 +52,13 @@ const ChatWindow = () => {
     React.useEffect(() => {
         if (storedChat?._id) {
             socket?.on("message received", (chat) => {
-                console.log(chat);
-                console.log(chat?.message);
-                console.log(store)
-                console.log(chat?.chatId === storedChat?._id);
+
                 if (chat?.chatId === storedChat?._id) {
                     setMessageList((prev) => [...prev, chat]);
                     scrollToBottom();
                 }
                 else{
-                    console.log("else")
+             
                     dispatch(updateChatList({
                         chatList:[{
                             "_id": chat?.chatId,
@@ -90,17 +79,6 @@ const ChatWindow = () => {
 
     }, [socket, storedChat]);
 
-    React.useEffect(() => {
-        socket?.on("typing", () => {
-            console.log("start")
-            setIsTyping(() => true)
-        })
-
-        socket?.on("stop Typing", () => {
-            console.log("stop")
-            setIsTyping(false)
-        })
-    }, [socket])
 
     const scrollToBottom = () => {
         setTimeout(() => {
@@ -112,7 +90,7 @@ const ChatWindow = () => {
         try {
             const response = await readMessageApiCall(chatId)
             if (response?.data?.success) {
-                socket?.emit("messageRead", chatId, userId)
+                socket?.emit("removeRead", chatId,userId)
             }
             else {
                 dispatch(
@@ -162,7 +140,6 @@ const ChatWindow = () => {
 
             }
             catch (error) {
-                console.log(error)
                 dispatch(
                     updateSnackBar({
                         open: true,
@@ -219,7 +196,6 @@ const ChatWindow = () => {
                 setEnteredMessage('')
                 scrollToBottom()
                 socket?.emit('newMessage', payload)
-                socket?.emit("unreadMessages", chatId)
             }
             else {
                 dispatch(
@@ -244,23 +220,6 @@ const ChatWindow = () => {
     }
     const changeHandler = (e) => {
         setEnteredMessage(() => e.target.value)
-
-        if (!typing) {
-            setTyping(true)
-            socket?.emit("startTyping", chatId)
-        }
-        let lastType = new Date().getTime()
-        var timerLength = 3000
-        setTimeout(() => {
-            var timeNow = new Date().getTime()
-            var timeDiff = timeNow - lastType
-            if (timeDiff >= timerLength && typing) {
-                socket?.emit("stopTyping", chatId)
-                setTyping(false)
-            }
-
-        }, timerLength)
-
     }
     return (
         <div className={`${classes.container} ${!chatId ? classes.noDisplay : ''}`}>
@@ -285,9 +244,6 @@ const ChatWindow = () => {
                             </div>
                         ))}
                         <div ref={messagesEndRef} />
-                    </div>
-                    <div>
-                        {isTyping && <p>Loading....</p>}
                     </div>
                     <div style={{ position: 'sticky', bottom: 0, right: 0, left: 0, height: '4rem' }} >
                         <TextField
