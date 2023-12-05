@@ -2,7 +2,7 @@ import * as React from "react";
 import { Routes, Route } from "react-router-dom"
 import AuthLayout from "../pages/AuthLayout/AuthLayout";
 import ChatLayout from "../pages/ChatLayout/ChatLayout";
-
+import NotFound from "../pages/NotFound/NotFound";
 
 const RouterConfig = () => {
 
@@ -11,6 +11,7 @@ const RouterConfig = () => {
             <Routes >
                 <Route path="/" element={<AuthLayout />} />
                 <Route path="/chats" element={<ChatLayout/>} />
+                <Route path="*" element={<NotFound/>} />
             </Routes>
         </>
     )
