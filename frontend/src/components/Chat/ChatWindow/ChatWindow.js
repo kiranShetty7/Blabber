@@ -17,6 +17,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useNavigate } from 'react-router';
 import { useMediaQuery } from '@mui/material';
 import { updateChatList } from '../../../store/ChatSlice';
+import { getUserProfilePic } from '../../../utils/getUserProfilePoc';
 
 const ChatWindow = () => {
     const store = useSelector((state) => state)
@@ -227,7 +228,7 @@ const ChatWindow = () => {
                 <>
                     <div style={{ height: '2rem', backgroundColor: '#496DDB', padding: '1rem', display: 'flex', alignItems: 'center', gap: 5, position: 'sticky' }}>
                         <ArrowBackIosIcon className={!isMobile ? classes.noBackButton : classes.backButton} onClick={handleBack} />
-                        <ProfilePic src={storedChat?.profilePic} />
+                        <ProfilePic src={!storedChat?.profilePic ? getUserProfilePic(storedChat?.users) : storedChat?.profilePic} />
                         <h3 style={{ color: '#fff' }}>{!storedChat?.isGroupChat ? getUserName(storedChat?.users) : storedChat?.chatName}</h3>
 
                     </div>

@@ -38,6 +38,7 @@ const Login = () => {
                 localStorage.setItem('userId', response?.data?.data?.userId)
                 localStorage.setItem('profilePic', response?.data?.data?.profilePic)
                 localStorage.setItem('token', response?.data?.data?.token)
+                localStorage.setItem('email', response?.data?.data?.email)
                 setTimeout(() => { navigate('/chats') }, 1000)
             }
             else {

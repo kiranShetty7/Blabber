@@ -86,6 +86,7 @@ const SignUp = () => {
                 localStorage.setItem('userId', response?.data?.data?.userId)
                 localStorage.setItem('profilePic', response?.data?.data?.profilePic)
                 localStorage.setItem('token', response?.data?.data?.token)
+                localStorage.setItem('email', response?.data?.data?.email)
                 localStorage.removeItem('uploadProfileLink')
                 navigate('/chats')
             }
