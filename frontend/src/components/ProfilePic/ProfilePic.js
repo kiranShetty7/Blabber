@@ -12,9 +12,11 @@ const ProfilePic = (props) => {
 
 
     return (
-        checkValidity(props.src) ?
-            <img src={props.src} alt="Chat image" className={classes.profile} /> :
-                <AccountCircleIcon className={classes.noImage} />
+        <>
+       { checkValidity(props.src) ?
+            <img src={"http://res.cloudinary.com/dxludokby/image/upload/v1699627813/st4aya4sow51efzcdlw2.jpg"} alt="Chat image" className={classes.profile} /> :
+                <AccountCircleIcon className={classes.noImage} />}
+        </>
     );
 };
 

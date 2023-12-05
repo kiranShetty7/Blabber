@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -13,6 +13,8 @@ import { updateChatList } from '../../store/ChatSlice';
 import { updateGroupModal } from '../../store/AddGroupSlice';
 import { createBlabberChat } from '../../services/blabberApiHandler';
 import moment, { localeData } from 'moment';
+import { getUserName } from '../../utils/GetChatName';
+import { useNavigate } from 'react-router';
 
 // Custom debounce function
 function debounce(func, wait) {
@@ -30,7 +32,10 @@ const SearchBar = (props) => {
     const dispatch = useDispatch();
     const store = useSelector((state) => state)
     const chatList = store.chat
-
+    const socketState = store.socket
+    const [enteredString, setEnteredString] = useState('')
+    const [socket, setSocket] = useState(null)
+    const navigate = useNavigate()
     // Create a debounced version of getMenuItems
     const debouncedGetMenuItems = debounce(async (value) => {
         try {
@@ -58,6 +63,10 @@ const SearchBar = (props) => {
         }
     }, 300); // Adjust the debounce delay (e.g., 300 milliseconds)
 
+    useEffect(() => {
+        setSocket(socketState?.socket)
+    }, [socketState?.socket])
+
     const createChat = async (item, payload, users) => {
         try {
             const response = await createBlabberChat(payload)
@@ -79,6 +88,7 @@ const SearchBar = (props) => {
                                 "users": users,
                                 "profilePic": localStorage.getItem('uploadProfileLink'),
                                 "createdAt": moment().toISOString(),
+                                read: false,
                             }]
                         }
                     )
@@ -123,7 +133,9 @@ const SearchBar = (props) => {
 
         const payload = {
             isGroupChat: false,
-            users: userList
+            users: userList,
+            chatName: getUserName(users),
+            read: false
         }
 
         const userExists = chatList?.initialChatList?.filter((filterItem) => {
@@ -131,20 +143,27 @@ const SearchBar = (props) => {
                 const isPresent = filterItem?.users?.some(user => user._id === item._id);
                 return isPresent;
             }
-            return false; 
+            return false;
         });
-        
-        
+
+
         console.log(userExists)
-        if (userExists.length>0) {
-            alert("ide kano chattu")
+        if (userExists?.length > 0) {
+            const chatString = JSON.stringify(userExists[0]);
+            localStorage.setItem('chatDetails', chatString);
+            navigate(`/chats?chatId=${userExists[0]?._id}`);
+            hideMenuItem()
+
         }
         else
             createChat(item, payload, users)
+
+        setEnteredString('')
     }
 
     const getMenuItems = (e) => {
         // Call the debounced function when the user types
+        setEnteredString(e.target.value)
         debouncedGetMenuItems(e.target.value);
     };
 
@@ -159,6 +178,7 @@ const SearchBar = (props) => {
                 id="outlined-start-adornment"
                 className={classes.search}
                 placeholder="Find fellow blabberes..."
+                valeu={enteredString}
                 InputProps={{
                     endAdornment: <InputAdornment position="end"><SearchIcon className={classes.searchIcon} /></InputAdornment>,
                 }}

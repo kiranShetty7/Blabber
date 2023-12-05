@@ -6,6 +6,7 @@ const chatSchema = mongoose.Schema({
     latestMessage: { type: mongoose.Schema.Types.ObjectId, ref: "Message" },
     groupAdmin: { type: mongoose.Schema.Types.ObjectId, ref: "Message" },
     chatName: { type: String, trim: true },
+    read:{ type: Boolean, default: true },
     profilePic: String
 }, { timestamps: true })
 

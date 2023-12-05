@@ -9,7 +9,8 @@ import {
   CREATE_BLABBER_CHAT,
   GET_BLABBER_CHAT_LIST,
   SEND_MESSAGE,
-  GET_INDIVIDUAL_CHAT_DETAILS
+  GET_INDIVIDUAL_CHAT_DETAILS,
+  READ_MESSAGE
 } from "./Constants";
 import axios from 'axios'
 import history from "../RouterConfig/CustomBrowserHistory";
@@ -155,6 +156,24 @@ export async function getIndividualChat(chatId) {
   return new Promise(async (resolve, reject) => {
     try {
       const URL = BLABBER_BASE_URL + VERSION + CHAT + GET_INDIVIDUAL_CHAT_DETAILS + '/' + chatId;
+      const CONFIG = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+
+      };
+      const response = await instance.get(URL, CONFIG);
+      resolve(response);
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
+export async function readMessageApiCall(chatId) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const URL = BLABBER_BASE_URL + VERSION + CHAT + READ_MESSAGE + '/' + chatId;
       const CONFIG = {
         headers: {
           'Content-Type': 'application/json',

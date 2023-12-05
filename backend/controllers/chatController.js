@@ -94,7 +94,8 @@ const sendMessage = asyncHandler(async (req, res) => {
         if (messageCreated) {
             const update = {
                 $set: {
-                    latestMessage: messageCreated._id
+                    latestMessage: messageCreated._id,
+                    read:false
                 }
             };
             const condition = { _id: chatId };
@@ -105,7 +106,7 @@ const sendMessage = asyncHandler(async (req, res) => {
             }
             else {
                 res.status(201).json({
-                    success: "true",
+                    success: true,
                     message: "Message sent succesfully",
                     messageId: messageCreated._id
                 })
@@ -146,8 +147,37 @@ const getListOfChats = asyncHandler(async (req, res) => {
     }
 });
 
+const readMessage = asyncHandler(async(req,res)=>{
+    const chatId = req.params.id
+
+    if(!chatId)
+    throw new Error("Pls send a valid chatId")
+
+    else{
+        const update = {
+            $set: {
+                read: true
+            }
+        };
+
+        const condition = { _id: chatId };
+        const readMessage = await Chat.updateOne(condition, update)
+        if (!readMessage) {
+            res.status(500);
+        }
+        else {
+            res.status(201).json({
+                success: true,
+                message: "Unread message updated on chat",
+                data: readMessage._id
+            })
+        }
+
+    }
+}
+)
 
 
 
 
-module.exports = { getIndividualChat, sendMessage, getListOfChats, createChat }
+module.exports = { getIndividualChat, sendMessage, getListOfChats, createChat,readMessage }

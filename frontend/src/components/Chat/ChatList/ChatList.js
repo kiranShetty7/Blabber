@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router';
 import CreateGroup from '../../CreateGroupModal/CreateGroup';
 import { updateSocket } from '../../../store/SocketSlice';
-import {io} from 'socket.io-client'
+import { io } from 'socket.io-client'
 
 const ChatList = () => {
   const dispatch = useDispatch()
@@ -41,7 +41,15 @@ const ChatList = () => {
     }))
 
     newSocket.emit("appEntered", userId);
-    newSocket.on("connection", () => setConnectedToSocket(true));
+    newSocket.on("connected", () => setConnectedToSocket(true));
+
+  //   newSocket.on("message received", (chat) => {
+  //     console.log(chat);
+  //     console.log(chatId);
+  //     if (chat?.chatId !== chatId) {
+  //         // alert("sdcs cks")
+  //     }
+  // });
 
     return () => {
       newSocket.disconnect();
@@ -49,20 +57,26 @@ const ChatList = () => {
 
   }, [])
 
+
   React.useEffect(() => {
     fetchData()
   }, [])
 
   React.useEffect(() => {
     setChatList(prev => [...chatState.chatList, ...prev])
+    console.log('aaf')
   }, [chatState.chatList])
 
-//   React.useEffect(()=>{
-//     socket?.on("message received",(chat)=>{
-//         console.log(chat)
+//   React.useEffect(() => {
+//     if (chatId) {
       
-//     })
-// })
+
+//         return () => {
+//             socket?.off("message received");
+//         };
+//     }
+
+// }, [socket]);
 
   const fetchData = async () => {
     dispatch(
@@ -115,16 +129,12 @@ const ChatList = () => {
   }
 
   const handleClick = (chat) => {
-    console.log(chat)
-    dispatch(
-      updateSelectedChatDetails({
-        selectedChatDetails: chat
-      })
-    )
-
-    socket.emit('chatEntered', chat._id)
-    navigate(`/chats?chatId=${chat._id}`)
+    const chatString = JSON.stringify(chat);
+    localStorage.setItem('chatDetails', chatString);
+    socket?.emit('chatEntered', chat._id);
+    navigate(`/chats?chatId=${chat._id}`);
   }
+
 
   return (
     <div className={`${classes.container}  ${chatId ? classes.noDisplay : ''}`}>
@@ -138,10 +148,11 @@ const ChatList = () => {
           <ChatItem
             id={chat._id}
             isGroupChat={chat.isGroupChat}
-            profileLink={chat.profilePic}
+            profilePic={chat.profilePic}
             chatName={chat.isGroupChat ? chat.chatName : getUserName(chat?.users)}
             latestMessage={chat.latestMessage?.message}
             created={chat.createdAt}
+            read={chat?.read}
             onClick={() => handleClick(chat)}
           />
         ))}

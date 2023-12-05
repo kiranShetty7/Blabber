@@ -6,6 +6,7 @@ router.post('/createBlabberChat', protect, chatController.createChat)
 router.get('/getIndividualChat/:id', protect, chatController.getIndividualChat)
 router.post('/sendMessage', protect, chatController.sendMessage)
 router.get('/listOfChats', protect, chatController.getListOfChats)
+router.get('/readMessage/:id', protect, chatController.readMessage)
 
 
 module.exports = router
