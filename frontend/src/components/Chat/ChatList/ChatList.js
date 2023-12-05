@@ -17,6 +17,7 @@ import { useLocation } from 'react-router';
 import CreateGroup from '../../CreateGroupModal/CreateGroup';
 import { updateSocket } from '../../../store/SocketSlice';
 import { io } from 'socket.io-client'
+import { getUserProfilePic } from '../../../utils/getUserProfilePoc';
 
 const ChatList = () => {
   const dispatch = useDispatch()
@@ -66,6 +67,7 @@ const ChatList = () => {
     try {
       const response = await getBlabberChats()
       if (response?.data?.success) {
+        console.log(response?.data?.data)
         setChatList(response?.data?.data)
         dispatch(
           updateInitialChatList({
@@ -127,7 +129,7 @@ const ChatList = () => {
           <ChatItem
             id={chat._id}
             isGroupChat={chat.isGroupChat}
-            profilePic={chat.profilePic}
+            profilePic={chat.isGroupChat ? chat.profilePic : getUserProfilePic(chat?.users)}
             chatName={chat.isGroupChat ? chat.chatName : getUserName(chat?.users)}
             latestMessage={chat.latestMessage?.message}
             created={chat.createdAt}

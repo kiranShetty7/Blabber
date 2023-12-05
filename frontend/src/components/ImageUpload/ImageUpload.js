@@ -6,6 +6,8 @@ import Loader from '../Loader/Loader'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useDispatch } from 'react-redux';
 import { updateLoader } from '../../store/ImageUploadSlice';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 const ImageUpload = (props) => {
     const [picLoading, setPicLoading] = React.useState(false);
@@ -22,7 +24,7 @@ const ImageUpload = (props) => {
     const handleImageUpload = async (event) => {
         const pic = event.target.files[0];
 
-        dispatch(updateLoader({loading:true}))
+        dispatch(updateLoader({ loading: true }))
         setPicLoading(true);
 
         if (!pic) {
@@ -58,13 +60,13 @@ const ImageUpload = (props) => {
         })
             .then((res) => res.json())
             .then((data) => {
-                localStorage.setItem("uploadProfileLink",data.url)
+                localStorage.setItem("uploadProfileLink", data.url)
                 setPicLoading(false);
-                dispatch(updateLoader({loading:false}))
+                dispatch(updateLoader({ loading: false }))
                 setUploadSuccess(true);
             })
             .catch((err) => {
-                dispatch(updateLoader({loading:false}))
+                dispatch(updateLoader({ loading: false }))
                 setPicLoading(false);
             });
 
@@ -98,7 +100,9 @@ const ImageUpload = (props) => {
                         </label>
                     )
                 ) : (
-                    <Loader />
+                    <Box >
+                        <CircularProgress />
+                    </Box>
                 )
             }
         </div>
