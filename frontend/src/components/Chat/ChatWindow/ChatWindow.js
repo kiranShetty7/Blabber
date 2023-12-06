@@ -18,11 +18,11 @@ import { useNavigate } from 'react-router';
 import { useMediaQuery } from '@mui/material';
 import { updateChatList } from '../../../store/ChatSlice';
 import { getUserProfilePic } from '../../../utils/getUserProfilePoc';
+import { io } from 'socket.io-client'
 
 const ChatWindow = () => {
     const store = useSelector((state) => state)
     const isMobile = useMediaQuery('(max-width:768px)');
-    const socketState = store.socket
     const userId = localStorage.getItem('userId');
     const dispatch = useDispatch();
     const [enteredMessage, setEnteredMessage] = React.useState("")
@@ -32,8 +32,10 @@ const ChatWindow = () => {
     const searchParams = new URLSearchParams(location?.search);
     const chatId = searchParams.get('chatId');
     const messagesEndRef = React.useRef(null)
-    const [socket, setSocket] = React.useState(null)
     const [storedChat, setStoredChat] = React.useState({})
+    const endpoint = "http://localhost:4000"
+    const [connectedToSocket, setConnectedToSocket] = React.useState(false)
+    const [socket, setSocket] = React.useState(null)
 
     React.useEffect(() => {
         fetchData(chatId)
@@ -41,8 +43,18 @@ const ChatWindow = () => {
 
 
     React.useEffect(() => {
-        setSocket(socketState?.socket)
-    }, [socketState?.socket])
+        const newSocket = io(endpoint);
+        setSocket(newSocket);
+
+        newSocket.emit("appEntered", userId);
+        newSocket.on("connected", () => setConnectedToSocket(true));
+
+        return () => {
+            newSocket.disconnect();
+        };
+
+    }, [])
+
 
     React.useEffect(() => {
         const storedChatString = localStorage.getItem('chatDetails');
@@ -58,10 +70,10 @@ const ChatWindow = () => {
                     setMessageList((prev) => [...prev, chat]);
                     scrollToBottom();
                 }
-                else{
-             
+                else {
+
                     dispatch(updateChatList({
-                        chatList:[{
+                        chatList: [{
                             "_id": chat?.chatId,
                             "isGroupChat": chat?.isGroupChat,
                             "users": chat?.ArrowBackIosIconusers,
@@ -80,7 +92,6 @@ const ChatWindow = () => {
 
     }, [socket, storedChat]);
 
-
     const scrollToBottom = () => {
         setTimeout(() => {
             messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -91,7 +102,7 @@ const ChatWindow = () => {
         try {
             const response = await readMessageApiCall(chatId)
             if (response?.data?.success) {
-                socket?.emit("removeRead", chatId,userId)
+                socket?.emit("removeRead", chatId, userId)
             }
             else {
                 dispatch(
@@ -128,6 +139,7 @@ const ChatWindow = () => {
                 if (response?.data?.success) {
                     setMessageList(response?.data?.data);
                     readMessage()
+                    socket?.emit('chatEntered', chatId);
                 }
                 else {
                     dispatch(
@@ -221,7 +233,11 @@ const ChatWindow = () => {
     }
     const changeHandler = (e) => {
         setEnteredMessage(() => e.target.value)
+
     }
+
+
+
     return (
         <div className={`${classes.container} ${!chatId ? classes.noDisplay : ''}`}>
             {chatId ?
@@ -234,7 +250,7 @@ const ChatWindow = () => {
                     </div>
                     <div style={{ height: 'calc(100% - 8rem)', overflow: 'auto' }} >
                         {messageList.map((messages, index) => (
-                            <div >
+                            <div key={index}>
                                 <Message
                                     content={messages.message}
                                     timeStamp={messages.timeStamp}

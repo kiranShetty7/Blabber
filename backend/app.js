@@ -57,6 +57,7 @@ io.on("connection", (socket) => {
     console.log("User has joined the chat",chatId)
   })
 
+
   socket.on('newMessage', (chat) => {
     console.log('chat',"socket macja")
     if(!chat?.users)

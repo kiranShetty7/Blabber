@@ -15,8 +15,6 @@ import { updateAppLoader } from '../../../store/LoaderSlice';
 import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router';
 import CreateGroup from '../../CreateGroupModal/CreateGroup';
-import { updateSocket } from '../../../store/SocketSlice';
-import { io } from 'socket.io-client'
 import { getUserProfilePic } from '../../../utils/getUserProfilePoc';
 
 const ChatList = () => {
@@ -28,26 +26,8 @@ const ChatList = () => {
   const location = useLocation()
   const searchParams = new URLSearchParams(location?.search);
   const chatId = searchParams.get('chatId');
-  const endpoint = "http://localhost:4000"
-  const [connectedToSocket, setConnectedToSocket] = React.useState(false)
-  const [socket, setSocket] = React.useState(null)
   const userId = localStorage.getItem('userId');
 
-  React.useEffect(() => {
-    const newSocket = io(endpoint);
-    setSocket(newSocket);
-    dispatch(updateSocket({
-      socket: newSocket
-    }))
-
-    newSocket.emit("appEntered", userId);
-    newSocket.on("connected", () => setConnectedToSocket(true));
-
-    return () => {
-      newSocket.disconnect();
-    };
-
-  }, [])
 
 
   React.useEffect(() => {
@@ -111,7 +91,6 @@ const ChatList = () => {
   const handleClick = (chat) => {
     const chatString = JSON.stringify(chat);
     localStorage.setItem('chatDetails', chatString);
-    socket?.emit('chatEntered', chat._id);
     navigate(`/chats?chatId=${chat._id}`);
   }
 
@@ -124,7 +103,7 @@ const ChatList = () => {
         <GroupAddIcon className={classes.groupAddIcon} onClick={handleModalOpen} />
       </div>
       <div className={classes.chatList}>
-        {chatList.map((chat) => (
+        {chatList.map((chat,index) => (
           <ChatItem
             id={chat._id}
             isGroupChat={chat.isGroupChat}
@@ -133,6 +112,7 @@ const ChatList = () => {
             latestMessage={chat.latestMessage?.message}
             created={chat.createdAt}
             read={chat?.read}
+            key={index}
             onClick={() => handleClick(chat)}
           />
         ))}

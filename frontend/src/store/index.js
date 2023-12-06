@@ -4,7 +4,6 @@ import AddGroupSlice from './AddGroupSlice';
 import ImageUploadSlice from './ImageUploadSlice';
 import ChatSlice from './ChatSlice';
 import LoaderSlice from './LoaderSlice';
-import SocketSlice from './SocketSlice';
 
 const store = configureStore({
     reducer: {
@@ -13,7 +12,6 @@ const store = configureStore({
         imageUpload:ImageUploadSlice,
         chat:ChatSlice,
         loader:LoaderSlice,
-        socket:SocketSlice
     },
 });
 
