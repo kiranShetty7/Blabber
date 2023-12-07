@@ -16,12 +16,13 @@ import { useLocation } from 'react-router';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useNavigate } from 'react-router';
 import { useMediaQuery } from '@mui/material';
-import { updateChatList } from '../../../store/ChatSlice';
+import { updateChat, updateChatList } from '../../../store/ChatSlice';
 import { getUserProfilePic } from '../../../utils/getUserProfilePoc';
-import { io } from 'socket.io-client'
+import { useSocket } from '../../../context/Socket';
 
 const ChatWindow = () => {
     const store = useSelector((state) => state)
+    const chatState = store.chat
     const isMobile = useMediaQuery('(max-width:768px)');
     const userId = localStorage.getItem('userId');
     const dispatch = useDispatch();
@@ -33,27 +34,11 @@ const ChatWindow = () => {
     const chatId = searchParams.get('chatId');
     const messagesEndRef = React.useRef(null)
     const [storedChat, setStoredChat] = React.useState({})
-    const endpoint = "http://localhost:4000"
-    const [connectedToSocket, setConnectedToSocket] = React.useState(false)
-    const [socket, setSocket] = React.useState(null)
+    const socket = useSocket()
 
     React.useEffect(() => {
         fetchData(chatId)
     }, [location?.search])
-
-
-    React.useEffect(() => {
-        const newSocket = io(endpoint);
-        setSocket(newSocket);
-
-        newSocket.emit("appEntered", userId);
-        newSocket.on("connected", () => setConnectedToSocket(true));
-
-        return () => {
-            newSocket.disconnect();
-        };
-
-    }, [])
 
 
     React.useEffect(() => {
@@ -63,34 +48,12 @@ const ChatWindow = () => {
     }, [chatId]);
 
     React.useEffect(() => {
-        if (storedChat?._id) {
-            socket?.on("message received", (chat) => {
-
-                if (chat?.chatId === storedChat?._id) {
-                    setMessageList((prev) => [...prev, chat]);
+        console.log(chatState?.newMessage)
+                    setMessageList((prev) => [...prev, chatState?.newMessage]);
                     scrollToBottom();
-                }
-                else {
+                
 
-                    dispatch(updateChatList({
-                        chatList: [{
-                            "_id": chat?.chatId,
-                            "isGroupChat": chat?.isGroupChat,
-                            "users": chat?.ArrowBackIosIconusers,
-                            "profilePic": chat?.profilePic,
-                            "createdAt": chat?.createdAt,
-                            read: false,
-                        }]
-                    }))
-                }
-            });
-
-            return () => {
-                socket?.off("message received");
-            };
-        }
-
-    }, [socket, storedChat]);
+    }, [chatState?.newMessage]);
 
     const scrollToBottom = () => {
         setTimeout(() => {
@@ -102,7 +65,9 @@ const ChatWindow = () => {
         try {
             const response = await readMessageApiCall(chatId)
             if (response?.data?.success) {
-                socket?.emit("removeRead", chatId, userId)
+                dispatch(updateChat({
+                    chatIdToBeUpdated: chatId
+                }))
             }
             else {
                 dispatch(
@@ -179,6 +144,7 @@ const ChatWindow = () => {
         )
 
         setTimeout(() => {
+            localStorage.removeItem('chatDetails')
             naviagte('/chats')
             dispatch(
                 updateAppLoader({
@@ -252,9 +218,9 @@ const ChatWindow = () => {
                         {messageList.map((messages, index) => (
                             <div key={index}>
                                 <Message
-                                    content={messages.message}
-                                    timeStamp={messages.timeStamp}
-                                    sentBy={messages.sentBy}
+                                    content={messages?.message}
+                                    timeStamp={messages?.createdAt}
+                                    sentBy={messages?.sentBy}
                                     nextItem={messageList[index + 1]?.sentBy}
                                     isGroupChat={storedChat?.isGroupChat}
                                 />

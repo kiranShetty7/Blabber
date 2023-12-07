@@ -43,6 +43,10 @@
 }
 
 .latestMessage {
+    white-space: nowrap;       
+    overflow: hidden;           
+    text-overflow: ellipsis;
+    max-width: 15rem;
     margin-top: 0.5rem;
 }
 

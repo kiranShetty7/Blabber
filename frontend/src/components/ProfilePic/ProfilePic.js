@@ -11,7 +11,8 @@ const ProfilePic = (props) => {
         <>
             {
                 checkValidity(props.src) ?
-                    <img src={props.src} alt="Chat image" className={`${classes.profile} ${props.className}`} onClick={props.onClick} />
+                <img src={props.src} alt="Chat image" className={`${classes.profile} ${props.className}`} onClick={props.onClick} />
+               
                     :
                     <AccountCircleIcon className={`${classes.noImage} ${props.className}`} onClick={props.onClick}/>
             }

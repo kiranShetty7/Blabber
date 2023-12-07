@@ -8,7 +8,7 @@ import ChatItem from '../ChatItem/ChatItem';
 import { getBlabberChats } from '../../../services/blabberApiHandler';
 import { updateSnackBar } from '../../../store/SnackBarSlice';
 import { updateInitialChatList } from '../../../store/ChatSlice';
-import { updateSelectedChatDetails } from '../../../store/ChatSlice';
+import { updateSelectedChatDetails, updateMessage } from '../../../store/ChatSlice';
 import { getUserName } from '../../../utils/GetChatName';
 import { getTime } from '../../../utils/getTime';
 import { updateAppLoader } from '../../../store/LoaderSlice';
@@ -16,6 +16,8 @@ import { useNavigate } from 'react-router';
 import { useLocation } from 'react-router';
 import CreateGroup from '../../CreateGroupModal/CreateGroup';
 import { getUserProfilePic } from '../../../utils/getUserProfilePoc';
+import { useSocket } from '../../../context/Socket';
+import moment from 'moment';
 
 const ChatList = () => {
   const dispatch = useDispatch()
@@ -27,16 +29,78 @@ const ChatList = () => {
   const searchParams = new URLSearchParams(location?.search);
   const chatId = searchParams.get('chatId');
   const userId = localStorage.getItem('userId');
-
-
+  const socket = useSocket()
+  const [storedChat, setStoredChat] = React.useState({})
 
   React.useEffect(() => {
     fetchData()
   }, [])
 
   React.useEffect(() => {
+    const storedChatString = localStorage.getItem('chatDetails');
+    const parsedStoredChat = storedChatString ? JSON.parse(storedChatString) : null;
+    setStoredChat(parsedStoredChat)
+  }, [chatId]);
+
+  React.useEffect(() => {
     setChatList(prev => [...chatState.chatList, ...prev])
   }, [chatState.chatList])
+
+  React.useEffect(() => {
+    setChatList(prev => prev.map((chatItem) => {
+      if (chatItem._id === chatState.chatIdToBeUpdated)
+        return {
+          ...chatItem,
+          read: true
+        }
+      else
+        return chatItem
+    }))
+  }, [chatState.chatIdToBeUpdated])
+
+
+  React.useEffect(() => {
+
+    socket?.on("message received", (chat) => {
+      console.log(chat)
+      if (chat?.chatId === storedChat?._id) {
+        dispatch(updateMessage({ newMessage: chat }))
+      }
+      else {
+
+        const newChat = chatList?.filter((chatItem) => chatItem?._id === chat?.chatId)
+        if (newChat?.length > 0) {
+          const data = chatList.map((chatItem)=>{
+            if(chatItem?._id === chat?.chatId)
+            return{
+              ...chat,
+              latestMessage: { message: chat?.message },
+               _id: chat.chatId,
+               createdAt: moment().toISOString()
+            }
+            else
+            return chatItem
+          })
+          const sortedData = data.sort((a, b) => moment(b.createdAt).diff(moment(a.createdAt)));
+          setChatList([...sortedData])
+        }
+        else{
+          setChatList((prev) =>
+          [{
+            ...chat,
+            latestMessage: { message: chat?.message }, _id: chat.chatId
+          }, ...prev])
+        }
+
+      }
+    });
+
+    return () => {
+      socket?.off("message received");
+    };
+
+
+  }, [storedChat]);
 
   const fetchData = async () => {
     dispatch(
@@ -103,7 +167,7 @@ const ChatList = () => {
         <GroupAddIcon className={classes.groupAddIcon} onClick={handleModalOpen} />
       </div>
       <div className={classes.chatList}>
-        {chatList.map((chat,index) => (
+        {chatList.map((chat, index) => (
           <ChatItem
             id={chat._id}
             isGroupChat={chat.isGroupChat}

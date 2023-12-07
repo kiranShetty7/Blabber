@@ -59,7 +59,6 @@ io.on("connection", (socket) => {
 
 
   socket.on('newMessage', (chat) => {
-    console.log('chat',"socket macja")
     if(!chat?.users)
     console.log('Users not present')
 

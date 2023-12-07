@@ -2,6 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     initialChatList: [],
+    newMessage:{},
+    chatIdToBeUpdated:'',
     chatList: [],
     selectedChatDetails: {
         _id: "",
@@ -33,8 +35,17 @@ const chatSlice = createSlice({
           
             state.selectedChatDetails = action.payload.selectedChatDetails;
         },
+
+        updateChat(state, action) {
+          
+            state.chatIdToBeUpdated = action.payload.chatIdToBeUpdated;
+        },
+
+        updateMessage(state,action){
+            state.newMessage = action.payload.newMessage;
+        }
     },
 });
 
-export const { updateChatList, updateInitialChatList, updateSelectedChatDetails } = chatSlice.actions;
+export const { updateChatList, updateInitialChatList, updateSelectedChatDetails,updateChat,updateMessage} = chatSlice.actions;
 export default chatSlice.reducer;

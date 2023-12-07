@@ -8,17 +8,14 @@ import { useSelector } from 'react-redux';
 import { getTime } from '../../../utils/getTime';
 
 const ChatItem = (props) => {
-    const { latestMessage, created, profilePic, id, isGroupChat, chatName ,read} = props
+    const { latestMessage, created, profilePic, id, isGroupChat, chatName, read } = props
     const store = useSelector((state) => state)
     const chatState = store.chat
     const [selectedId, setSelectedId] = React.useState('')
 
-
     React.useEffect(() => {
         setSelectedId(chatState.selectedChatDetails._id);
     }, [chatState.selectedChatDetails._id]);
-
-
 
     return (<>
 
@@ -33,10 +30,10 @@ const ChatItem = (props) => {
             <div className={classes.item3}>{isGroupChat && <Groups2Icon />} </div>
             <div className={classes.item4}>
                 <span>{getTime(created)}</span>
-              {!read && <MessageNumber></MessageNumber>}  
+                {!read && <MessageNumber></MessageNumber>}
             </div>
         </div>
-        </>
+    </>
 
     )
 }

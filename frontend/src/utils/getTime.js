@@ -11,7 +11,7 @@ export const getTime = (time) => {
   if (diffMinutes < 2) {
     return "Just now";
   } else if (diffMinutes >= 2 && diffHours < 24) {
-    return Time.format("HH:mm:A");
+    return Time.format("hh:mm:A");
   } else if (diffHours >= 24 && diffHours < 48) {
     return "Yesterday";
   } else {

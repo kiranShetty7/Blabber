@@ -124,6 +124,7 @@ const SearchBar = (props) => {
             name: localStorage.getItem('name'),
             email: localStorage.getItem('email'),
             _id: localStorage.getItem('userId'),
+            profilePic:localStorage.getItem('profilePic')
         }
         const users = [{ ...item }, { ...currentUser }]
 

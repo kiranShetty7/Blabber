@@ -57,7 +57,7 @@ const GlobalNavbar = () => {
             }}
           >
             <div style={{ padding: '1rem', borderBottom: '1px solid black', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-             <a href={profilePicSrc}> <ProfilePic src={profilePicSrc} className={classes.profile} /></a>
+             <ProfilePic src={profilePicSrc} className={classes.profile} />
               <span style={{ fontSize: '1.5rem' }}>{localStorage.getItem('name')}</span>
               <span style={{ fontSize: '0.75rem' }}>{localStorage.getItem('email')}</span>
 
