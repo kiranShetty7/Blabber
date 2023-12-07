@@ -9,7 +9,7 @@ export const useSocket = () => {
 
 export const SocketProvider = ({ children }) => {
     const [socket, setSocket] = useState(null);
-    const endpoint = "http://localhost:4000"
+    const endpoint = "https://blabber-backend.onrender.com/"
     const userId = localStorage.getItem('userId')
 
     useEffect(() => {
