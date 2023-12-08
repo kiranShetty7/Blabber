@@ -170,11 +170,11 @@ const CreateGroup = (props) => {
             >
                 <form onSubmit={handleSubmit(handleCreateGroup)}>
                     <Box sx={style}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }} onClick={handleClose}>
+                        <div className={classes.header} onClick={handleClose}>
                             <h3>Create your blabber gang...!</h3>
-                            <CloseIcon style={{ cursor: 'pointer' }} />
+                            <CloseIcon className={classes.closeIcon}/>
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+                        <div className={classes.textFieldContainer}>
                             <TextField
                                 id="outlined-basic"
                                 label="Whisper your blabber gang name"

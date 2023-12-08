@@ -208,13 +208,13 @@ const ChatWindow = () => {
         <div className={`${classes.container} ${!chatId ? classes.noDisplay : ''}`}>
             {chatId ?
                 <>
-                    <div style={{ height: '2rem', backgroundColor: '#496DDB', padding: '1rem', display: 'flex', alignItems: 'center', gap: 5, position: 'sticky' }}>
+                    <div className={classes.header}>
                         <ArrowBackIosIcon className={!isMobile ? classes.noBackButton : classes.backButton} onClick={handleBack} />
                         <ProfilePic src={!storedChat?.profilePic ? getUserProfilePic(storedChat?.users) : storedChat?.profilePic} />
-                        <h3 style={{ color: '#fff' }}>{!storedChat?.isGroupChat ? getUserName(storedChat?.users) : storedChat?.chatName}</h3>
+                        <h3 className={classes.chatName}>{!storedChat?.isGroupChat ? getUserName(storedChat?.users) : storedChat?.chatName}</h3>
 
                     </div>
-                    <div style={{ height: 'calc(100% - 8rem)', overflow: 'auto' }} >
+                    <div className={classes.messageList} >
                         {messageList.map((messages, index) => (
                             <div key={index}>
                                 <Message
@@ -228,7 +228,7 @@ const ChatWindow = () => {
                         ))}
                         <div ref={messagesEndRef} />
                     </div>
-                    <div style={{ position: 'sticky', bottom: 0, right: 0, left: 0, height: '4rem' }} >
+                    <div  className={classes.sendMessage}>
                         <TextField
                             id="outlined-start-adornment"
                             className={classes.typingSection}

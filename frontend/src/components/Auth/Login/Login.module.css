@@ -4,3 +4,18 @@
     flex-direction: column;
     gap: 20px;
 }
+
+.emailInput {
+    width: 100%;
+}
+
+.passwordInput {
+    margin: 1rem;
+    width: 100%;
+}
+
+.submit {
+    width: 100% !important;
+    text-transform: initial;
+    background-color: #7584F4;
+}

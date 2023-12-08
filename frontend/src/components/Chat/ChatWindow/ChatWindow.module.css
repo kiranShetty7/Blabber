@@ -37,4 +37,29 @@
     cursor: not-allowed;
 }
 
-.profilePic {}
+.header {
+    height: 2rem;
+    background-color: #496DDB;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    position: sticky;
+}
+
+.messageList {
+    height: calc(100% - 8rem);
+    overflow: auto;
+}
+
+.sendMessage {
+    position: sticky;
+    bottom: 0px;
+    right: 0px;
+    left: 0px;
+    height: 4rem;
+}
+
+.chatName{
+    color: #fff;
+}

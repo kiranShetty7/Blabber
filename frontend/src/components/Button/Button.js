@@ -6,7 +6,7 @@ const BlabberButton = (props) => {
         <Button
             {...props}
             variant="contained"
-            className={classes.button}
+            className={`${classes.button} ${classes.className}`}
             sx={{ ...props.sx, textTransform: 'initial', backgroundColor: '#7584F4' }}
             disabled={props.disabled}
         >{props.children}</Button>

@@ -69,7 +69,7 @@ const Login = () => {
                     <TextField
                         id="email"
                         label="Summon your email spirit to this realm."
-                        sx={{ width: '100%' }}
+                        className={classes.emailInput}
                         {...register('email', {
                             required: 'Email is required',
                             pattern: {
@@ -80,7 +80,7 @@ const Login = () => {
                         error={!!errors.email}
                         helperText={errors.email?.message}
                     />
-                    <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+                    <FormControl variant="outlined" className={classes.passwordInput}>
                         <InputLabel htmlFor="outlined-adornment-password">Shhh... Password Entry</InputLabel>
                         <OutlinedInput
                             id="password"
